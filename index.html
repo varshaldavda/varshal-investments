@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ELSS investments</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+	<style type="text/css">
+		red {  background-color: rgba(255,0,0,0.4); }
+		yellow { background-color: rgba(255,255,0,0.6);}
+	</style>
+</head>
+<body>
+
+	<table class="table table-bordered" id="folio">
+		<thead>
+		    <tr>
+		      <th scope="col" width="20%">Fund</th>
+		      <th scope="col" width="10%">Purchase NAV</th>
+		      <th scope="col" width="10%">Units</th>
+		      <th scope="col" width="10%">Amount</th>
+		      <th scope="col" width="10%">Current NAV</th>
+		      <th scope="col" width="20%">PnL</th>
+		    </tr>
+	  	</thead>
+		<tbody id="tbody-folio">
+		</tbody>
+		<tfoot>
+		    <tr>
+		      <td colspan="5">Total : 55000 </td>
+		      <td id="total"></td>
+		    </tr>
+		 </tfoot>
+	</table>
+
+	<table class="table table-bordered" id="watch">
+		<thead>
+			<tr>
+				<th>Fund</th>
+				<th>cNav</th>				
+				<th>52 weeks high</th>	
+				<th>52 weeks low</th>	
+			</tr>
+		</thead>
+		<tbody id="tbody-watchlist">
+			
+		</tbody>
+
+	</table>
+	<script>
+		setTimeout(call, 500);
+		setTimeout(populateWatchList, 1000);
+
+		var domParser = new DOMParser();
+		function call() {
+			$.each(investments, function(i, v) {
+				$.get(v.url, function(data) {
+					populateTable(i, data, v);
+				});
+			});
+		}
+		var sum = 0;
+		function populateTable(tr, scrapedData, config) {
+			var data = domParser.parseFromString(scrapedData, 'text/html');
+			var title = $(data).children().children('head').children('title').text();
+			var arr = title.substring(0, title.indexOf('|')).trim()
+			var fund = arr.substring(0, arr.indexOf('['));
+			var cNav = arr.substring(arr.indexOf('[')+1, arr.indexOf(']'));
+			var $tr = $('<tr />');
+			$tr.append('<td>' + fund + '</td>');
+			$tr.append('<td>' + config.pNav + '</td>');
+			$tr.append('<td>' + config.units + '</td>');
+			$tr.append('<td>' + config.amt + '</td>');
+			$tr.append('<td>' + cNav + '</td>');
+			var pnl = convert((cNav - config.pNav) * config.units)
+			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
+
+			$tr.appendTo($('#tbody-folio'));
+
+			sum += pnl;
+			$('#total').text(convert(sum));
+		}
+
+		function populateWatchList() {
+			$.each(watchList, function(i, v) {
+				$.get(v, function(scrapedData) {
+					var data = domParser.parseFromString(scrapedData, 'text/html');
+					var fund = $(data).find('.heading.btm-bdr.mgbtm.pr').text().trim();
+					var cNav = $(data).find('.m-score-left').children()[0].innerText.trim().substring(0, 5);
+					var highVal = $($(data).find('.table-row')[0]).children()[1].innerHTML.trim();
+					var lowVal = $($(data).find('.table-row')[1]).children()[1].innerHTML.trim();
+					console.log(fund, highVal, lowVal);
+
+					var $tr = $('<tr />');
+					$tr.append('<td>' + fund + '</td>');
+					$tr.append('<td>' + cNav + '</td>');
+					$tr.append('<td>' + highVal + '</td>');
+					$tr.append('<td>' + lowVal + '</td>');
+					$tr.appendTo($('#tbody-watchlist'));
+				});
+			});
+		}
+
+		function convert(num) {
+			return +(Math.round(num + "e+2")  + "e-2");
+		}
+
+		var investments = [
+			{
+				'pNav' : 606.5936732,
+				'units' : 32.971,
+				'amt' : 20000, 
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/hdfc-tax-saver-fund-direct-plan-growth/MHD1167'
+			},
+			{
+				'pNav' : 68.38884988,
+				'units' : 219.334,
+				'amt' : 15000,
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/axis-long-term-equity-fund-direct-plan/MAA192'
+			},
+			{
+				'pNav' : 65.844,
+				'units' : 227.8,
+				'amt' : 15000,
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/kotak-tax-saver-direct-plan/MKM518'
+			},
+			{
+				'pNav' : 27.088,
+				'units' : 184.574,
+				'amt' : 5000,
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/mirae-asset-tax-saver-fund-direct-plan/MMA150'
+			}
+		];
+
+		var watchList = [ 
+			'https://www.financialexpress.com/mutual-funds-india/scheme/kotak-pioneer-fundddirect-plan-44288/',
+			'https://www.financialexpress.com/mutual-funds-india/scheme/axis-bluechip-fundgdirect-plan-18186/',
+			'https://www.financialexpress.com/mutual-funds-india/scheme/sbi-bluechip-fundgdirect-plan-18959/'
+		];
+	</script>
+</body>
+</html>
