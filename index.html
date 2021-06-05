@@ -19,10 +19,11 @@
 		<thead>
 		    <tr>
 		      <th scope="col" width="20%">Fund</th>
-		      <th scope="col" width="10%">Purchase NAV</th>
+		      <th scope="col" width="10%">pNAV</th>
 		      <th scope="col" width="10%">Units</th>
 		      <th scope="col" width="10%">Amount</th>
-		      <th scope="col" width="10%">Current NAV</th>
+		      <th scope="col" width="10%">cNAV</th>
+		      <th scope="col" width="10%">cNAV Date</th>
 		      <th scope="col" width="20%">PnL</th>
 		    </tr>
 	  	</thead>
@@ -30,7 +31,7 @@
 		</tbody>
 		<tfoot>
 		    <tr>
-		      <td colspan="5">Total : 55000 </td>
+		      <td colspan="6">Total : 55000 </td>
 		      <td id="total"></td>
 		    </tr>
 		 </tfoot>
@@ -66,16 +67,19 @@
 		var sum = 0;
 		function populateTable(tr, scrapedData, config) {
 			var data = domParser.parseFromString(scrapedData, 'text/html');
-			var title = $(data).children().children('head').children('title').text();
+			var title = $(data).find('title').text();
+			var cNavDate = $(data).find('.grayvalue').eq(0).text();
 			var arr = title.substring(0, title.indexOf('|')).trim()
 			var fund = arr.substring(0, arr.indexOf('['));
 			var cNav = arr.substring(arr.indexOf('[')+1, arr.indexOf(']'));
+			
 			var $tr = $('<tr />');
 			$tr.append('<td>' + fund + '</td>');
 			$tr.append('<td>' + config.pNav + '</td>');
 			$tr.append('<td>' + config.units + '</td>');
 			$tr.append('<td>' + config.amt + '</td>');
 			$tr.append('<td>' + cNav + '</td>');
+			$tr.append('<td>' + cNavDate + '</td>');
 			var pnl = convert((cNav - config.pNav) * config.units)
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
 
@@ -90,14 +94,15 @@
 				$.get(v, function(scrapedData) {
 					var data = domParser.parseFromString(scrapedData, 'text/html');
 					var fund = $(data).find('.heading.btm-bdr.mgbtm.pr').text().trim();
-					var cNav = $(data).find('.m-score-left').children()[0].innerText.trim().substring(0, 5);
+					var $div = $(data).find('.m-score-left').children();
+					var cNav = $div[0].innerText.trim().substring(0, 5);
+					var cNavDate = $div[1].innerText.trim();
 					var highVal = $($(data).find('.table-row')[0]).children()[1].innerHTML.trim();
 					var lowVal = $($(data).find('.table-row')[1]).children()[1].innerHTML.trim();
-					console.log(fund, highVal, lowVal);
-
+					
 					var $tr = $('<tr />');
 					$tr.append('<td>' + fund + '</td>');
-					$tr.append('<td>' + cNav + '</td>');
+					$tr.append('<td>' + cNav + ' - ' + cNavDate + '</td>');
 					$tr.append('<td>' + highVal + '</td>');
 					$tr.append('<td>' + lowVal + '</td>');
 					$tr.appendTo($('#tbody-watchlist'));
