@@ -19,6 +19,12 @@
 		.m-score-up {
 		    color: green;
 		}
+		.green_text {
+			color : green;
+		}
+		.red_text {
+			color: red;
+		}
 	</style>
 </head>
 <body>
@@ -34,6 +40,7 @@
 		      <th scope="col" width="10%">Amount</th>
 		      <th scope="col" width="10%">cNAV</th>
 		      <th scope="col" width="10%">cNAV Date</th>
+		      <th scope="col" width="10%">cNAV Change</th>
 		      <th scope="col" width="20%">PnL</th>
 		    </tr>
 	  	</thead>
@@ -41,7 +48,7 @@
 		</tbody>
 		<tfoot>
 		    <tr>
-		      <td colspan="7">Total : 55000 </td>
+		      <td colspan="8">Total : 55000 </td>
 		      <td id="total"></td>
 		    </tr>
 		 </tfoot>
@@ -92,6 +99,14 @@
 			$tr.append('<td>' + config.amt + '</td>');
 			$tr.append('<td>' + cNav + '</td>');
 			$tr.append('<td>' + cNavDate + '</td>');
+
+			var cNavChange = $(data).find('.leftblok').children('.green_text')[0] 
+							? $(data).find('.leftblok').children('.green_text')[0] 
+							: $(data).find('.leftblok').children('.red_text')[0];
+			var $td = $('<td />');
+			$td.html(cNavChange);
+			$tr.append($td);
+
 			var pnl = convert((cNav - config.pNav) * config.units)
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
 
@@ -108,8 +123,7 @@
 					var fund = $(data).find('.heading.btm-bdr.mgbtm.pr').text().trim();
 					var $div = $(data).find('.m-score-left').children();
 					var cNav = $div[0];
-					// var cNav = $div;
-					console.log(cNav)
+
 					var cNavDate = $div[1].innerText.trim();
 					var highVal = $($(data).find('.table-row')[0]).children()[1].innerHTML.trim();
 					var lowVal = $($(data).find('.table-row')[1]).children()[1].innerHTML.trim();
@@ -166,7 +180,10 @@
 			'https://www.financialexpress.com/mutual-funds-india/scheme/kotak-pioneer-fundgdirect-plan-44287/',
 			'https://www.financialexpress.com/mutual-funds-india/scheme/axis-bluechip-fundgdirect-plan-18186/',
 			'https://www.financialexpress.com/mutual-funds-india/scheme/sbi-bluechip-fundgdirect-plan-18959/',
-			'https://www.financialexpress.com/mutual-funds-india/scheme/canara-rob-equity-tax-saver-fundgdirect-plan-18353/'
+			'https://www.financialexpress.com/mutual-funds-india/scheme/canara-rob-equity-tax-saver-fundgdirect-plan-18353/',
+			'https://www.financialexpress.com/mutual-funds-india/scheme/axis-midcap-fundgdirect-plan-18194/',
+			'https://www.financialexpress.com/mutual-funds-india/scheme/hdfc-small-cap-fundgdirect-plan-18759/',
+			'https://www.financialexpress.com/mutual-funds-india/scheme/iifl-focused-equity-fundgdirect-plan-30926/'
 		];
 	</script>
 </body>
