@@ -36,12 +36,13 @@
 		      <th scope="col" width="20%">Fund</th>
 		      <th scope="col" width="10%">pNAV</th>
 		      <th scope="col" width="10%">pNAV Date</th>
-		      <th scope="col" width="10%">Units</th>
-		      <th scope="col" width="10%">Amount</th>
+		      <th scope="col" width="5%">Units</th>
+		      <th scope="col" width="5%">Amount</th>
 		      <th scope="col" width="10%">cNAV</th>
 		      <th scope="col" width="10%">cNAV Date</th>
 		      <th scope="col" width="10%">cNAV Change</th>
-		      <th scope="col" width="20%">PnL</th>
+		      <th scope="col" width="10%">PnL</th>
+		      <th scope="col" width="10%">PnL (%) </th>
 		    </tr>
 	  	</thead>
 		<tbody id="tbody-folio">
@@ -50,6 +51,7 @@
 		    <tr>
 		      <td colspan="8">Total : 55000 </td>
 		      <td id="total"></td>
+		      <td id="total2"></td>
 		    </tr>
 		 </tfoot>
 	</table>
@@ -80,6 +82,7 @@
 				$.get(v.url, function(data) {
 					populateTable(i, data, v);
 				});
+				console.log('sdfasdfasdfasdf');
 			});
 		}
 		var sum = 0;
@@ -109,11 +112,16 @@
 
 			var pnl = convert((cNav - config.pNav) * config.units)
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
+			sum += pnl;
+
+			var pnlPercentage = convert(percentage(pnl, config.amt));
+			pnlPercentage < 0 ? ($tr.append('<td><red>' + pnlPercentage + '</red></td>')) 
+							  : ($tr.append('<td><yellow>' + pnlPercentage + '</yellow></td>'))
 
 			$tr.appendTo($('#tbody-folio'));
-
-			sum += pnl;
+			console.log(convert(percentage(sum, 55000)));
 			$('#total').text(convert(sum));
+			$('#total2').text(convert(percentage(sum, 55000)));
 		}
 
 		function populateWatchList() {
@@ -150,28 +158,28 @@
 				'pNav' : 606.5936732,
 				'units' : 32.971,
 				'amt' : 20000, 
-				'pNavDate' : '22nd March, 2021',
+				'pNavDate' : 'March 22, 2021',
 				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/hdfc-tax-saver-fund-direct-plan-growth/MHD1167'
 			},
 			{
 				'pNav' : 68.38884988,
 				'units' : 219.334,
 				'amt' : 15000,
-				'pNavDate' : '12nd March, 2021',
+				'pNavDate' : 'March 12, 2021',
 				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/axis-long-term-equity-fund-direct-plan/MAA192'
 			},
 			{
 				'pNav' : 65.844,
 				'units' : 227.8,
 				'amt' : 15000,
-				'pNavDate' : '13th March, 2021',
+				'pNavDate' : 'March 13, 2021',
 				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/kotak-tax-saver-direct-plan/MKM518'
 			},
 			{
 				'pNav' : 27.088,
 				'units' : 184.574,
 				'amt' : 5000,
-				'pNavDate' : '13th April, 2021',
+				'pNavDate' : 'April 13, 2021',
 				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/mirae-asset-tax-saver-fund-direct-plan/MMA150'
 			}
 		];
@@ -187,6 +195,11 @@
 			'https://www.financialexpress.com/mutual-funds-india/scheme/axis-nifty-100-index-fundgdirect-plan-44211/',
 			'https://www.financialexpress.com/mutual-funds-india/scheme/kotak-nifty-50-index-fundgdirect-plan-45558/'
 		];
+
+		function percentage(partialValue, totalValue) {
+		   return (100 * partialValue) / totalValue;
+		} 
+
 	</script>
 </body>
 </html>
