@@ -29,8 +29,8 @@
 </head>
 <body>
 
-	<h4>Portfolio</h4>
-	<table class="table table-bordered" id="folio">
+	<h4>2020-21 Portfolio</h4>
+	<table class="table table-bordered" id="202021folio">
 		<thead>
 		    <tr>
 		      <th scope="col" width="20%">Fund</th>
@@ -45,13 +45,40 @@
 		      <th scope="col" width="10%">PnL (%) </th>
 		    </tr>
 	  	</thead>
-		<tbody id="tbody-folio">
+		<tbody id="tbody-202021folio">
 		</tbody>
 		<tfoot>
 		    <tr>
-		      <td colspan="8">Total : 55000 </td>
+		      <td colspan="8">Total : 50000 </td>
 		      <td id="total"></td>
 		      <td id="total2"></td>
+		    </tr>
+		 </tfoot>
+	</table>
+	
+	<h4>2021-22 Portfolio</h4>
+	<table class="table table-bordered" id="202122folio">
+		<thead>
+		    <tr>
+		      <th scope="col" width="20%">Fund</th>
+		      <th scope="col" width="10%">pNAV</th>
+		      <th scope="col" width="10%">pNAV Date</th>
+		      <th scope="col" width="5%">Units</th>
+		      <th scope="col" width="5%">Amount</th>
+		      <th scope="col" width="10%">cNAV</th>
+		      <th scope="col" width="10%">cNAV Date</th>
+		      <th scope="col" width="10%">cNAV Change</th>
+		      <th scope="col" width="10%">PnL</th>
+		      <th scope="col" width="10%">PnL (%) </th>
+		    </tr>
+	  	</thead>
+		<tbody id="tbody-202122folio">
+		</tbody>
+		<tfoot>
+		    <tr>
+		      <td colspan="8">Total : 26000 </td>
+		      <td id="total202122"></td>
+		      <td id="total2202122"></td>
 		    </tr>
 		 </tfoot>
 	</table>
@@ -73,19 +100,29 @@
 
 	</table>
 	<script>
-		setTimeout(call, 500);
+		setTimeout(call202021, 500);
+		setTimeout(call202122, 500);
 		setTimeout(populateWatchList, 1000);
 
 		var domParser = new DOMParser();
-		function call() {
-			$.each(investments, function(i, v) {
+		function call202021() {
+			$.each(investments202021, function(i, v) {
 				$.get(v.url, function(data) {
 					populateTable(i, data, v);
 				});
 				console.log('sdfasdfasdfasdf');
 			});
 		}
-		var sum = 0;
+		
+		function call202122() {
+			$.each(investments202122, function(i, v) {
+				$.get(v.url, function(data) {
+					populateTable202122(i, data, v);
+				});
+				console.log('sdfasdfasdfasdf');
+			});
+		}
+		var sum1 = 0;
 		function populateTable(tr, scrapedData, config) {
 			var data = domParser.parseFromString(scrapedData, 'text/html');
 			var title = $(data).find('title').text();
@@ -112,16 +149,56 @@
 
 			var pnl = convert((cNav - config.pNav) * config.units)
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
-			sum += pnl;
+			sum1 += pnl;
 
 			var pnlPercentage = convert(percentage(pnl, config.amt));
 			pnlPercentage < 0 ? ($tr.append('<td><red>' + pnlPercentage + '</red></td>')) 
 							  : ($tr.append('<td><yellow>' + pnlPercentage + '</yellow></td>'))
 
-			$tr.appendTo($('#tbody-folio'));
-			console.log(convert(percentage(sum, 55000)));
-			$('#total').text(convert(sum));
-			$('#total2').text(convert(percentage(sum, 55000)));
+			$tr.appendTo($('#tbody-202021folio'));
+			console.log(convert(percentage(sum1, 50000)));
+			$('#total').text(convert(sum1));
+			$('#total2').text(convert(percentage(sum1, 50000)));
+		}
+
+
+		var sum2 = 0;
+		function populateTable202122(tr, scrapedData, config) {
+			var data = domParser.parseFromString(scrapedData, 'text/html');
+			var title = $(data).find('title').text();
+			var cNavDate = $(data).find('.grayvalue').eq(0).text();
+			var arr = title.substring(0, title.indexOf('|')).trim()
+			var fund = arr.substring(0, arr.indexOf('['));
+			var cNav = arr.substring(arr.indexOf('[')+1, arr.indexOf(']'));
+			
+			var $tr = $('<tr />');
+			$tr.append('<td>' + fund + '</td>');
+			$tr.append('<td>' + config.pNav + '</td>');
+			$tr.append('<td>' + config.pNavDate + '</td>');
+			$tr.append('<td>' + config.units + '</td>');
+			$tr.append('<td>' + config.amt + '</td>');
+			$tr.append('<td>' + cNav + '</td>');
+			$tr.append('<td>' + cNavDate + '</td>');
+
+			var cNavChange = $(data).find('.leftblok').children('.green_text')[0] 
+							? $(data).find('.leftblok').children('.green_text')[0] 
+							: $(data).find('.leftblok').children('.red_text')[0];
+			var $td = $('<td />');
+			$td.html(cNavChange);
+			$tr.append($td);
+
+			var pnl = convert((cNav - config.pNav) * config.units)
+			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
+			sum2 += pnl;
+
+			var pnlPercentage = convert(percentage(pnl, config.amt));
+			pnlPercentage < 0 ? ($tr.append('<td><red>' + pnlPercentage + '</red></td>')) 
+							  : ($tr.append('<td><yellow>' + pnlPercentage + '</yellow></td>'))
+
+			$tr.appendTo($('#tbody-202122folio'));
+			console.log(convert(percentage(sum2, 26000)));
+			$('#total202122').text(convert(sum2));
+			$('#total2202122').text(convert(percentage(sum2, 26000)));
 		}
 
 		function populateWatchList() {
@@ -153,7 +230,7 @@
 			return +(Math.round(num + "e+2")  + "e-2");
 		}
 
-		var investments = [
+		var investments202021 = [
 			{
 				'pNav' : 606.5936732,
 				'units' : 32.971,
@@ -174,13 +251,37 @@
 				'amt' : 15000,
 				'pNavDate' : 'March 13, 2021',
 				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/kotak-tax-saver-direct-plan/MKM518'
-			},
+			}
+		];
+		
+		var investments202122 = [
 			{
 				'pNav' : 27.088,
 				'units' : 184.574,
 				'amt' : 5000,
 				'pNavDate' : 'April 13, 2021',
 				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/mirae-asset-tax-saver-fund-direct-plan/MMA150'
+			},
+			{
+				'pNav' : 241.6364,
+				'units' : 28.968,
+				'amt' : 7000,
+				'pNavDate' : 'January 5, 2022',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/quant-tax-plan-direct-plan-growth/MES037'
+			},
+			{
+				'pNav' : 116.58,
+				'units' : 60.042,
+				'amt' : 7000,
+				'pNavDate' : 'January 5, 2022',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/boi-axa-tax-advantage-fund-direct-plan-growth/MBA083'
+			},
+			{
+				'pNav' : 127.57,
+				'units' : 54.869,
+				'amt' : 7000,
+				'pNavDate' : 'January 5, 2022',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/canara-robeco-equity-tax-saver-fund-direct-plan/MCA200'
 			}
 		];
 
