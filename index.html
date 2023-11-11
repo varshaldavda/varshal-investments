@@ -126,8 +126,8 @@
 		function populateTable(tr, scrapedData, config) {
 			var data = domParser.parseFromString(scrapedData, 'text/html');
 			var title = $(data).find('.display24').text();
-			var cNavDate = $(data).find('.fd12Header').text();
-			var cNav = $(data).find('.fd12Cell').text();
+			var cNavDate = $(data).find('.fd12Header').eq(0).text();
+			var cNav = $(data).find('.fd12Cell').eq(0).text();
 			console.log(title, cNavDate, cNav);
 			console.log($(data).find('.fd12Cell'));
 			
@@ -140,9 +140,7 @@
 			$tr.append('<td>' + cNav + '</td>');
 			$tr.append('<td>' + cNavDate + '</td>');
 
-			var cNavChange = $(data).find('.leftblok').children('.green_text')[0] 
-							? $(data).find('.leftblok').children('.green_text')[0] 
-							: $(data).find('.leftblok').children('.red_text')[0];
+			var cNavChange = $(data).find('.bodyMedium14').find('.mfh239OneDay');
 			var $td = $('<td />');
 			$td.html(cNavChange);
 			$tr.append($td);
