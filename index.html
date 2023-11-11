@@ -110,7 +110,6 @@
 				$.get(v.url, function(data) {
 					populateTable(i, data, v);
 				});
-				console.log('sdfasdfasdfasdf');
 			});
 		}
 		
@@ -119,7 +118,6 @@
 				$.get(v.url, function(data) {
 					populateTable202122(i, data, v);
 				});
-				console.log('sdfasdfasdfasdf');
 			});
 		}
 		var sum1 = 0;
@@ -128,8 +126,6 @@
 			var title = $(data).find('.display24').text();
 			var cNavDate = $(data).find('.fd12Header').eq(0).text();
 			var cNav = $(data).find('.fd12Cell').eq(0).text().substring(1).replace (/,/g, "");
-			console.log(title, cNavDate, cNav);
-			console.log($(data).find('.fd12Cell'));
 			
 			var $tr = $('<tr />');
 			$tr.append('<td>' + title + '</td>');
@@ -141,10 +137,8 @@
 			$tr.append('<td>' + cNavDate + '</td>');
 
 			var cNavChange = $(data).find('.bodyMedium14').find('.mfh239OneDay');
-			var $td = $('<td />');
-			$td.html(cNavChange);
-			$tr.append($td);
-
+			cNavChange.startsWith('+') ? ($tr.append('<td class="green_text">' + cNavChange + '</td>')) : ($tr.append('<td class="red_text">' + cNavChange + '</td>'))
+			
 			var pnl = convert((cNav - config.pNav) * config.units)
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
 			sum1 += pnl;
