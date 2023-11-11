@@ -127,7 +127,7 @@
 			var data = domParser.parseFromString(scrapedData, 'text/html');
 			var title = $(data).find('.display24').text();
 			var cNavDate = $(data).find('.fd12Header').eq(0).text();
-			var cNav = $(data).find('.fd12Cell').eq(0).text();
+			var cNav = $(data).find('.fd12Cell').eq(0).text().substring(1);
 			console.log(title, cNavDate, cNav);
 			console.log($(data).find('.fd12Cell'));
 			
@@ -225,6 +225,7 @@
 		}
 
 		function convert(num) {
+			console.log('convert : ', num);
 			return +(Math.round(num + "e+2")  + "e-2");
 		}
 
