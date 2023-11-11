@@ -127,7 +127,7 @@
 			var data = domParser.parseFromString(scrapedData, 'text/html');
 			var title = $(data).find('.display24').text();
 			var cNavDate = $(data).find('.fd12Header').eq(0).text();
-			var cNav = $(data).find('.fd12Cell').eq(0).text().substring(1);
+			var cNav = $(data).find('.fd12Cell').eq(0).text().substring(1).replace (/,/g, "");
 			console.log(title, cNavDate, cNav);
 			console.log($(data).find('.fd12Cell'));
 			
