@@ -125,9 +125,11 @@
 		var sum1 = 0;
 		function populateTable(tr, scrapedData, config) {
 			var data = domParser.parseFromString(scrapedData, 'text/html');
-			var title = $(data).find('.fund-info-heading').find('.h1').text();
+			var title = $(data).find('.display24').text();
 			var cNavDate = $(data).find('.fd12Header').text();
 			var cNav = $(data).find('.fd12Cell').text();
+			console.log(title, cNavDate, cNav);
+			console.log($(data).find('.fd12Cell'));
 			
 			var $tr = $('<tr />');
 			$tr.append('<td>' + title + '</td>');
