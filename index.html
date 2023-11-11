@@ -126,11 +126,11 @@
 		function populateTable(tr, scrapedData, config) {
 			var data = domParser.parseFromString(scrapedData, 'text/html');
 			var title = $(data).find('.fund-info-heading').find('.h1').text();
-			var cNavDate = $(data).find('.overview-date:first-child').find('p:first-child').text();
-			var cNav = $(data).find('.overview-date:first-child').find('.amount').text().split(' ')[1];
+			var cNavDate = $(data).find('.fd12Header').text();
+			var cNav = $(data).find('.fd12Cell').text();
 			
 			var $tr = $('<tr />');
-			$tr.append('<td>' + fund + '</td>');
+			$tr.append('<td>' + title + '</td>');
 			$tr.append('<td>' + config.pNav + '</td>');
 			$tr.append('<td>' + config.pNavDate + '</td>');
 			$tr.append('<td>' + config.units + '</td>');
@@ -234,21 +234,21 @@
 				'units' : 32.971,
 				'amt' : 20000, 
 				'pNavDate' : 'March 22, 2021',
-				'url' : 'https://www.etmoney.com/mutual-funds/hdfc-elss-tax-saver-direct-plan-growth/15727'
+				'url' : 'https://groww.in/mutual-funds/hdfc-taxsaver-direct-growth'
 			},
 			{
 				'pNav' : 68.38884988,
 				'units' : 219.334,
 				'amt' : 15000,
 				'pNavDate' : 'March 12, 2021',
-				'url' : 'https://www.etmoney.com/mutual-funds/axis-long-term-equity-direct-plan-growth/15255'
+				'url' : 'https://groww.in/mutual-funds/axis-long-term-equity-fund-direct-growth'
 			},
 			{
 				'pNav' : 65.844,
 				'units' : 227.8,
 				'amt' : 15000,
 				'pNavDate' : 'March 13, 2021',
-				'url' : 'https://www.etmoney.com/mutual-funds/kotak-elss-tax-saver-fund-direct-growth/15947'
+				'url' : 'https://groww.in/mutual-funds/kotak-taxsaver-direct-growth'
 			}
 		];
 		
