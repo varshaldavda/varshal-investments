@@ -138,7 +138,7 @@
 			$tr.append('<td>' + cNav + '</td>');
 			$tr.append('<td>' + cNavDate + '</td>');
 
-			var cNavChange = $(data).find('.bodyMedium14').find('.mfh239OneDay');
+			var cNavChange = $(data).find('.bodyBaseHeavy').find('.mfh239OneDay');
 			cNavChange.text().startsWith('+') ? ($tr.append('<td class="green_text">' + cNavChange.text() + '</td>')) : ($tr.append('<td class="red_text">' + cNavChange.text() + '</td>'))
 			
 			var pnl = convert((cNav - config.pNav) * config.units)
