@@ -124,9 +124,10 @@
 		function populateTable(tr, scrapedData, config) {
 			console.log(config);
 			var data = domParser.parseFromString(scrapedData, 'text/html');
-			var title = $(data).find('.display24').text();
+			var title = config.title ? config.title : $(data).find('.display24').text();
 			var cNavDate = $(data).find('.fd12Header').eq(0).text();
 			var cNav = $(data).find('.fd12Cell').eq(0).text().substring(1).replace (/,/g, "");
+			console.log(config.title + ' : cNav :' + cNav);
 			
 			var $tr = $('<tr />');
 			$tr.append('<td>' + title + '</td>');
