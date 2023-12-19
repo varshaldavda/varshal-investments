@@ -33,7 +33,7 @@
 	<table class="table table-bordered" id="202021folio">
 		<thead>
 		    <tr>
-		      <th scope="col" width="20%">Fund</th>
+		      <th scope="col" width="10%">Fund</th>
 		      <th scope="col" width="10%">pNAV</th>
 		      <th scope="col" width="10%">pNAV Date</th>
 		      <th scope="col" width="5%">Units</th>
@@ -42,6 +42,7 @@
 		      <th scope="col" width="10%">cNAV Date</th>
 		      <th scope="col" width="10%">cNAV Change</th>
 		      <th scope="col" width="10%">PnL</th>
+		      <th scope="col" width="10%">Total</th>
 		      <th scope="col" width="10%">PnL (%) </th>
 		    </tr>
 	  	</thead>
@@ -51,6 +52,7 @@
 		    <tr>
 		      <td colspan="8">Total : 50000 </td>
 		      <td id="total"></td>
+		      <td id="total3"></td>
 		      <td id="total2"></td>
 		    </tr>
 		 </tfoot>
@@ -145,14 +147,16 @@
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
 			sum1 += pnl;
 
+			$tr.append('<td>' + (config.amt + pnl) + '</td>');
+			
 			var pnlPercentage = convert(percentage(pnl, config.amt));
 			pnlPercentage < 0 ? ($tr.append('<td><red>' + pnlPercentage + '</red></td>')) 
 							  : ($tr.append('<td><yellow>' + pnlPercentage + '</yellow></td>'))
 
 			$tr.appendTo($('#tbody-202021folio'));
-			console.log(convert(percentage(sum1, 50000)));
 			$('#total').text(convert(sum1));
 			$('#total2').text(convert(percentage(sum1, 50000)));
+			$('#total3').text(convert(percentage(sum1 + pnl, 50000)));
 		}
 
 
