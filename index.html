@@ -147,7 +147,7 @@
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
 			sum1 += pnl;
 
-			$tr.append('<td>' + (config.amt + pnl) + '</td>');
+			$tr.append('<td>' + (convert(config.amt + pnl)) + '</td>');
 			
 			var pnlPercentage = convert(percentage(pnl, config.amt));
 			pnlPercentage < 0 ? ($tr.append('<td><red>' + pnlPercentage + '</red></td>')) 
@@ -156,7 +156,8 @@
 			$tr.appendTo($('#tbody-202021folio'));
 			$('#total').text(convert(sum1));
 			$('#total2').text(convert(percentage(sum1, 50000)));
-			$('#total3').text(convert(percentage(sum1 + pnl, 50000)));
+			console.log(convert(sum1 + pnl, 50000));
+			$('#total3').text(convert(sum1 + pnl, 50000));
 		}
 
 
