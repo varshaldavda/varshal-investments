@@ -122,6 +122,7 @@
 		}
 		var sum1 = 0;
 		function populateTable(tr, scrapedData, config) {
+			console.log(config);
 			var data = domParser.parseFromString(scrapedData, 'text/html');
 			var title = $(data).find('.display24').text();
 			var cNavDate = $(data).find('.fd12Header').eq(0).text();
@@ -229,21 +230,24 @@
 				'units' : 32.971,
 				'amt' : 20000, 
 				'pNavDate' : 'March 22, 2021',
-				'url' : 'https://groww.in/mutual-funds/hdfc-taxsaver-direct-growth'
+				'url' : 'https://groww.in/mutual-funds/hdfc-taxsaver-direct-growth',
+				'title' : 'HDFC ELSS'
 			},
 			{
 				'pNav' : 68.38884988,
 				'units' : 219.334,
 				'amt' : 15000,
 				'pNavDate' : 'March 12, 2021',
-				'url' : 'https://groww.in/mutual-funds/axis-long-term-equity-fund-direct-growth'
+				'url' : 'https://groww.in/mutual-funds/axis-long-term-equity-fund-direct-growth',
+				'title' : 'Axis ELSS'
 			},
 			{
 				'pNav' : 65.844,
 				'units' : 227.8,
 				'amt' : 15000,
 				'pNavDate' : 'March 13, 2021',
-				'url' : 'https://groww.in/mutual-funds/kotak-taxsaver-direct-growth'
+				'url' : 'https://groww.in/mutual-funds/kotak-taxsaver-direct-growth',
+				'title' : 'Kotak ELSS'
 			}
 		];
 		
@@ -253,28 +257,32 @@
 				'units' : 184.574,
 				'amt' : 5000,
 				'pNavDate' : 'April 13, 2021',
-				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/mirae-asset-tax-saver-fund-direct-plan/MMA150'
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/mirae-asset-tax-saver-fund-direct-plan/MMA150',
+				'title' : 'Mirae ELSS'
 			},
 			{
 				'pNav' : 241.6364,
 				'units' : 28.968,
 				'amt' : 7000,
 				'pNavDate' : 'January 5, 2022',
-				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/quant-tax-plan-direct-plan-growth/MES037'
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/quant-tax-plan-direct-plan-growth/MES037',
+				'title' : 'Quant ELSS'
 			},
 			{
 				'pNav' : 116.58,
 				'units' : 60.042,
 				'amt' : 7000,
 				'pNavDate' : 'January 5, 2022',
-				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/boi-axa-tax-advantage-fund-direct-plan-growth/MBA083'
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/boi-axa-tax-advantage-fund-direct-plan-growth/MBA083',
+				'title' : 'BOI Axa ELSS'
 			},
 			{
 				'pNav' : 127.57,
 				'units' : 54.869,
 				'amt' : 7000,
 				'pNavDate' : 'January 5, 2022',
-				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/canara-robeco-equity-tax-saver-fund-direct-plan/MCA200'
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/canara-robeco-equity-tax-saver-fund-direct-plan/MCA200',
+				'title' : 'Canara Robeco ELSS'
 			}
 		];
 
