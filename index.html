@@ -62,7 +62,7 @@
 	<table class="table table-bordered" id="202122folio">
 		<thead>
 		    <tr>
-		      <th scope="col" width="20%">Fund</th>
+		      <th scope="col" width="10%">Fund</th>
 		      <th scope="col" width="10%">pNAV</th>
 		      <th scope="col" width="10%">pNAV Date</th>
 		      <th scope="col" width="5%">Units</th>
@@ -71,6 +71,7 @@
 		      <th scope="col" width="10%">cNAV Date</th>
 		      <th scope="col" width="10%">cNAV Change</th>
 		      <th scope="col" width="10%">PnL</th>
+		      <th scope="col" width="10%">Total</th>
 		      <th scope="col" width="10%">PnL (%) </th>
 		    </tr>
 	  	</thead>
@@ -124,12 +125,10 @@
 		}
 		var sum1 = 0;
 		function populateTable(tr, scrapedData, config) {
-			console.log(config);
 			var data = domParser.parseFromString(scrapedData, 'text/html');
 			var title = config.title ? config.title : $(data).find('.display24').text();
 			var cNavDate = $(data).find('.fd12Header').eq(0).text();
 			var cNav = $(data).find('.fd12Cell').eq(0).text().substring(1).replace (/,/g, "");
-			console.log(config.title + ' : cNav :' + cNav);
 			
 			var $tr = $('<tr />');
 			$tr.append('<td>' + title + '</td>');
@@ -189,12 +188,13 @@
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
 			sum2 += pnl;
 
+			$tr.append('<td>' + (convert(config.amt + pnl)) + '</td>');
+			
 			var pnlPercentage = convert(percentage(pnl, config.amt));
 			pnlPercentage < 0 ? ($tr.append('<td><red>' + pnlPercentage + '</red></td>')) 
 							  : ($tr.append('<td><yellow>' + pnlPercentage + '</yellow></td>'))
 
 			$tr.appendTo($('#tbody-202122folio'));
-			console.log(convert(percentage(sum2, 26000)));
 			$('#total202122').text(convert(sum2));
 			$('#total2202122').text(convert(percentage(sum2, 26000)));
 		}
@@ -225,7 +225,6 @@
 		}
 
 		function convert(num) {
-			console.log('convert : ', num);
 			return +(Math.round(num + "e+2")  + "e-2");
 		}
 
