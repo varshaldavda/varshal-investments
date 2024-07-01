@@ -105,7 +105,7 @@
 	<script>
 		setTimeout(call202021, 500);
 		setTimeout(call202122, 500);
-		setTimeout(populateWatchList, 1000);
+		//setTimeout(populateWatchList, 1000);
 
 		var domParser = new DOMParser();
 		function call202021() {
@@ -126,9 +126,12 @@
 		var sum1 = 0;
 		function populateTable(tr, scrapedData, config) {
 			var data = domParser.parseFromString(scrapedData, 'text/html');
-			var title = config.title ? config.title : $(data).find('.display24').text();
-			var cNavDate = $(data).find('.fd12Header').eq(0).text();
-			var cNav = $(data).find('.fd12Cell').eq(0).text().substring(1).replace (/,/g, "");
+			var title = $(data).find('title').text();
+			var cNavDate = $(data).find('.grayvalue').eq(0).text();
+			var arr = title.substring(0, title.indexOf('|')).trim()
+			var fund = arr.substring(0, arr.indexOf('['));
+			var cNav = arr.substring(arr.indexOf('[')+1, arr.indexOf(']'));
+			
 			
 			var $tr = $('<tr />');
 			$tr.append('<td>' + title + '</td>');
@@ -139,14 +142,21 @@
 			$tr.append('<td>' + cNav + '</td>');
 			$tr.append('<td>' + cNavDate + '</td>');
 
-			var cNavChange = $(data).find('.bodyBaseHeavy').find('.mfh239OneDay');
-			cNavChange.text().startsWith('+') ? ($tr.append('<td class="green_text">' + cNavChange.text() + '</td>')) : ($tr.append('<td class="red_text">' + cNavChange.text() + '</td>'))
+			var cNavChange = $(data).find('.leftblok').children('.green_text')[0] 
+							? $(data).find('.leftblok').children('.green_text')[0] 
+							: $(data).find('.leftblok').children('.red_text')[0];
+			
+			var $td = $('<td />');
+			$td.html(cNavChange);
+			$tr.append($td);
 			
 			var pnl = convert((cNav - config.pNav) * config.units)
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
 			sum1 += pnl;
-
-			$tr.append('<td>' + (convert(config.amt + pnl)) + '</td>');
+			
+			var pnl = convert((cNav - config.pNav) * config.units)
+			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
+			sum2 += pnl;
 			
 			var pnlPercentage = convert(percentage(pnl, config.amt));
 			pnlPercentage < 0 ? ($tr.append('<td><red>' + pnlPercentage + '</red></td>')) 
@@ -156,6 +166,7 @@
 			$('#total').text(convert(sum1));
 			$('#total2').text(convert(percentage(sum1, 50000)));
 			$('#total3').text(convert(sum1 + 50000));
+			
 		}
 
 
@@ -234,7 +245,7 @@
 				'units' : 32.971,
 				'amt' : 20000, 
 				'pNavDate' : 'March 22, 2021',
-				'url' : 'https://groww.in/mutual-funds/hdfc-taxsaver-direct-growth',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/hdfc-elss-tax-saver-direct-plan-growth/MHD1167',
 				'title' : 'HDFC ELSS'
 			},
 			{
@@ -242,7 +253,7 @@
 				'units' : 219.334,
 				'amt' : 15000,
 				'pNavDate' : 'March 12, 2021',
-				'url' : 'https://groww.in/mutual-funds/axis-long-term-equity-fund-direct-growth',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/axis-elss-tax-saver-fund-direct-plan-growth/MAA192',
 				'title' : 'Axis ELSS'
 			},
 			{
@@ -250,7 +261,7 @@
 				'units' : 227.8,
 				'amt' : 15000,
 				'pNavDate' : 'March 13, 2021',
-				'url' : 'https://groww.in/mutual-funds/kotak-taxsaver-direct-growth',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/kotak-elss-tax-saver-fund-direct-plan-growth/MKM518',
 				'title' : 'Kotak ELSS'
 			}
 		];
