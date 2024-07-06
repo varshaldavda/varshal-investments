@@ -154,9 +154,7 @@
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
 			sum1 += pnl;
 			
-			var pnl = convert((cNav - config.pNav) * config.units)
-			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
-			sum2 += pnl;
+			$tr.append('<td>' + (convert(config.amt + pnl)) + '</td>');
 			
 			var pnlPercentage = convert(percentage(pnl, config.amt));
 			pnlPercentage < 0 ? ($tr.append('<td><red>' + pnlPercentage + '</red></td>')) 
