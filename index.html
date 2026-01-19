@@ -128,7 +128,7 @@
 			var data = domParser.parseFromString(scrapedData, 'text/html');
 			var title = $(data).find('title').text();
 			var cNavDate = $(data).find('.grayvalue').eq(0).text();
-			var arr = title.substring(0, title.indexOf('|')).trim()
+			var arr = title.substring(0, title.indexOf('-')).trim()
 			var fund = arr.substring(0, arr.indexOf('['));
 			var cNav = arr.substring(arr.indexOf('[')+1, arr.indexOf(']'));
 			
@@ -173,7 +173,7 @@
 			var data = domParser.parseFromString(scrapedData, 'text/html');
 			var title = $(data).find('title').text();
 			var cNavDate = $(data).find('.grayvalue').eq(0).text();
-			var arr = title.substring(0, title.indexOf('|')).trim()
+			var arr = title.substring(0, title.indexOf('-')).trim()
 			var fund = arr.substring(0, arr.indexOf('['));
 			var cNav = arr.substring(arr.indexOf('[')+1, arr.indexOf(']'));
 			
