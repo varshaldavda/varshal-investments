@@ -108,6 +108,11 @@
 		//setTimeout(populateWatchList, 1000);
 
 		var domParser = new DOMParser();
+		function getOverview(scrapedData) {
+			var data = domParser.parseFromString(scrapedData, 'text/html');
+			var nextData = JSON.parse($(data).find('#__NEXT_DATA__').text());
+			return nextData.props.pageProps.data.overview;
+		}
 		function call202021() {
 			$.each(investments202021, function(i, v) {
 				$.get(v.url, function(data) {
@@ -125,14 +130,13 @@
 		}
 		var sum1 = 0;
 		function populateTable(tr, scrapedData, config) {
-			var data = domParser.parseFromString(scrapedData, 'text/html');
-			var title = $(data).find('title').text();
-			var cNavDate = $(data).find('.grayvalue').eq(0).text();
-			var arr = title.substring(0, title.indexOf('-')).trim()
-			var fund = arr.substring(0, arr.indexOf('['));
-			var cNav = arr.substring(arr.indexOf('[')+1, arr.indexOf(']'));
-			
-			
+			var overview = getOverview(scrapedData);
+			var fund = overview.schemeName;
+			var cNav = overview.latestNAV;
+			var cNavDate = overview.navDate;
+			var cNavChange = overview.changeNAV;
+			var cNavChangeClass = cNavChange < 0 ? 'red_text' : 'green_text';
+
 			var $tr = $('<tr />');
 			$tr.append('<td>' + fund + '</td>');
 			$tr.append('<td>' + config.pNav + '</td>');
@@ -141,15 +145,8 @@
 			$tr.append('<td>' + config.amt + '</td>');
 			$tr.append('<td>' + cNav + '</td>');
 			$tr.append('<td>' + cNavDate + '</td>');
+			$tr.append('<td class="' + cNavChangeClass + '">' + cNavChange + '</td>');
 
-			var cNavChange = $(data).find('.leftblok').children('.green_text')[0] 
-							? $(data).find('.leftblok').children('.green_text')[0] 
-							: $(data).find('.leftblok').children('.red_text')[0];
-			
-			var $td = $('<td />');
-			$td.html(cNavChange);
-			$tr.append($td);
-			
 			var pnl = convert((cNav - config.pNav) * config.units)
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
 			sum1 += pnl;
@@ -170,13 +167,13 @@
 
 		var sum2 = 0;
 		function populateTable202122(tr, scrapedData, config) {
-			var data = domParser.parseFromString(scrapedData, 'text/html');
-			var title = $(data).find('title').text();
-			var cNavDate = $(data).find('.grayvalue').eq(0).text();
-			var arr = title.substring(0, title.indexOf('-')).trim()
-			var fund = arr.substring(0, arr.indexOf('['));
-			var cNav = arr.substring(arr.indexOf('[')+1, arr.indexOf(']'));
-			
+			var overview = getOverview(scrapedData);
+			var fund = overview.schemeName;
+			var cNav = overview.latestNAV;
+			var cNavDate = overview.navDate;
+			var cNavChange = overview.changeNAV;
+			var cNavChangeClass = cNavChange < 0 ? 'red_text' : 'green_text';
+
 			var $tr = $('<tr />');
 			$tr.append('<td>' + fund + '</td>');
 			$tr.append('<td>' + config.pNav + '</td>');
@@ -185,13 +182,7 @@
 			$tr.append('<td>' + config.amt + '</td>');
 			$tr.append('<td>' + cNav + '</td>');
 			$tr.append('<td>' + cNavDate + '</td>');
-
-			var cNavChange = $(data).find('.leftblok').children('.green_text')[0] 
-							? $(data).find('.leftblok').children('.green_text')[0] 
-							: $(data).find('.leftblok').children('.red_text')[0];
-			var $td = $('<td />');
-			$td.html(cNavChange);
-			$tr.append($td);
+			$tr.append('<td class="' + cNavChangeClass + '">' + cNavChange + '</td>');
 
 			var pnl = convert((cNav - config.pNav) * config.units)
 			pnl < 0 ? ($tr.append('<td><red>' + pnl + '</red></td>')) : ($tr.append('<td><yellow>' + pnl + '</yellow></td>'))
@@ -259,7 +250,7 @@
 				'units' : 227.8,
 				'amt' : 15000,
 				'pNavDate' : 'March 13, 2021',
-				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/kotak-elss-tax-saver-fund-direct-plan-growth/MKM518',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/kotak-tax-saver-direct-plan/MKM518',
 				'title' : 'Kotak ELSS'
 			}
 		];
@@ -270,7 +261,7 @@
 				'units' : 184.574,
 				'amt' : 5000,
 				'pNavDate' : 'April 13, 2021',
-				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/mirae-asset-tax-saver-fund-direct-plan/MMA150',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/mirae-asset-elss-tax-saver-fund-direct-plan-growth/MMA150',
 				'title' : 'Mirae ELSS'
 			},
 			{
@@ -278,7 +269,7 @@
 				'units' : 28.968,
 				'amt' : 7000,
 				'pNavDate' : 'January 5, 2022',
-				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/quant-tax-plan-direct-plan-growth/MES037',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/quant-elss-tax-saver-fund-direct-plan-growth/MES037',
 				'title' : 'Quant ELSS'
 			},
 			{
@@ -286,7 +277,7 @@
 				'units' : 60.042,
 				'amt' : 7000,
 				'pNavDate' : 'January 5, 2022',
-				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/boi-axa-tax-advantage-fund-direct-plan-growth/MBA083',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/bank-of-india-elss-tax-saver-direct-plan-growth/MBA083',
 				'title' : 'BOI Axa ELSS'
 			},
 			{
@@ -294,7 +285,7 @@
 				'units' : 54.869,
 				'amt' : 7000,
 				'pNavDate' : 'January 5, 2022',
-				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/canara-robeco-equity-tax-saver-fund-direct-plan/MCA200',
+				'url' : 'https://www.moneycontrol.com/mutual-funds/nav/canara-robeco-elss-tax-saver-fund-direct-plan/MCA200',
 				'title' : 'Canara Robeco ELSS'
 			}
 		];
